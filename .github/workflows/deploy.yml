@@ -1,0 +1,56 @@
+# /.github/workflows/deploy.yml
+name: Build and Deploy to Cloudflare Pages
+
+on:
+  # 日本時間の午前9時に定期実行 (UTCの0時)
+  schedule:
+    - cron: '0 0 * * *'
+  # 手動でも実行できるようにする
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # HTMLファイルを更新してコミットするために必要
+      issues: read   # Issueを読み取るために必要
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install PyGithub
+
+      - name: Update issues list in index.html
+        env:
+          # Step6で設定したSecretをスクリプトに渡す
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          REPO_NAME: ${{ github.repository }}
+        run: python scripts/update_issues.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          # index.htmlに変更があった場合のみコミットとプッシュを行う
+          if ! git diff --staged --quiet; then
+            git commit -m "Update issue list"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'issue-summary-page' # Step3で作成したCloudflare Pagesのプロジェクト名
+          directory: '.' # リポジトリのルートディレクトリをデプロイ
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
