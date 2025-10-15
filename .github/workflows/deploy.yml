@@ -14,6 +14,7 @@ jobs:
     permissions:
       contents: write # HTMLファイルを更新してコミットするために必要
       issues: read   # Issueを読み取るために必要
+      deployments: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
