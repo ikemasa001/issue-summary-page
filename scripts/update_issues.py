@@ -1,21 +1,21 @@
-# /scripts/update_issues.py
+# /scripts/update_issues.py (DEBUG VERSION)
 import os
 from github import Github
 
-# --- 設定 ---
+# --- Settings ---
 TEMPLATE_PATH = "scripts/template.html"
 OUTPUT_PATH = "index.html"
 ISSUE_LIMIT = 200
 
 def main():
     """
-    GitHubリポジトリのIssueを取得し、テンプレートからindex.htmlを生成する
+    GitHub repository Issuesを取得し、templateからindex.htmlを生成する
     """
     repo_name = os.environ.get("REPO_NAME")
     github_token = os.environ.get("GITHUB_TOKEN")
 
     if not repo_name or not github_token:
-        print("エラー: 必要な環境変数が設定されていません。")
+        print("ERROR: Required environment variables are not set.")
         exit(1)
 
     try:
@@ -28,7 +28,7 @@ def main():
 
         for issue in issues:
             if issue_count >= ISSUE_LIMIT:
-                print(f"警告: Issueが多いため、上限の{ISSUE_LIMIT}件で中断しました。")
+                print(f"WARNING: Too many issues. Stopped at the limit of {ISSUE_LIMIT}.")
                 break
 
             if issue.pull_request:
@@ -54,20 +54,42 @@ def main():
             issue_count += 1
 
         if not issues_html:
-            issues_html = "<p>現在オープンなIssueはありません。</p>"
+            issues_html = "<p>No open issues.</p>"
+
+        # --- DEBUGGING OUTPUT START ---
+        print("--- 🐞 DEBUG LOG START 🐞 ---")
+        print(f"\n[1] Found {issue_count} issue(s).")
+
+        print("\n[2] Generated issues_html:")
+        print("--------------------------")
+        print(issues_html)
+        print("--------------------------\n")
 
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
+        print("[3] Template content (first 200 chars):")
+        print("---------------------------------------")
+        print(content[:200])
+        print("---------------------------------------\n")
+
         new_content = content.replace("", issues_html)
+
+        print("[4] Final new_content (first 500 chars):")
+        print("---------------------------------------")
+        print(new_content[:500])
+        print("---------------------------------------\n")
+
+        print("--- 🐞 DEBUG LOG END 🐞 ---")
+        # --- DEBUGGING OUTPUT END ---
 
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
             f.write(new_content)
 
-        print(f"{OUTPUT_PATH} の生成が完了しました。({issue_count}件のIssue)")
+        print(f"Successfully generated {OUTPUT_PATH} ({issue_count} issue(s))")
 
     except Exception as e:
-        print(f"エラーが発生しました: {e}")
+        print(f"An error occurred: {e}")
         exit(1)
 
 if __name__ == "__main__":
