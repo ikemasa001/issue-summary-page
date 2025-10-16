@@ -18,7 +18,6 @@ def generate_issue_html(issue, all_issues, parent_child_map, is_child=False):
         for assignee in issue.assignees:
             assignees_html += f'<img src="{assignee.avatar_url}" width="20" height="20" alt="{assignee.login}" title="{assignee.login}" style="border-radius: 50%; margin-right: 5px;">'
 
-    # 💡 Issue本文をHTMLに変換
     issue_body_html = md.render(issue.body) if issue.body else ""
 
     child_issues_html = ""
@@ -26,13 +25,11 @@ def generate_issue_html(issue, all_issues, parent_child_map, is_child=False):
         for child_id in parent_child_map[issue.number]:
             if child_id in all_issues:
                 child_issue = all_issues[child_id]
-                # 子Issueはサマリー（タイトル行）だけを再帰的に生成
                 child_issues_html += generate_issue_html(child_issue, all_issues, parent_child_map, is_child=True)
 
     issue_class = "issue-child" if is_child else "issue-parent"
     
-    # 子がいる場合は<details>タグでアコーディオンにする
-    if not is_child and child_issues_html:
+    if not is_child and (child_issues_html or issue_body_html):
         html = f"""
         <div class="{issue_class}" id="issue-{issue.number}">
             <details>
@@ -43,14 +40,19 @@ def generate_issue_html(issue, all_issues, parent_child_map, is_child=False):
                     </div>
                 </summary>
                 <div class="issue-body">{issue_body_html}</div>
+                """
+        if child_issues_html:
+            html += f"""
                 <div class="sub-issues-container">
                     <h4>Sub-issues</h4>
                     {child_issues_html}
                 </div>
+                """
+        html += """
             </details>
         </div>
         """
-    else: # 子がいないIssue、または自分自身が子Issueの場合
+    else:
         html = f"""
         <div class="{issue_class}" id="issue-{issue.number}">
             <div class="issue-summary-line">
@@ -80,11 +82,9 @@ def main():
         parent_child_map = {}
         child_parent_map = {}
 
-        # 💡 親子判定ロジックをより正確なものに修正
         for issue in all_issues.values():
             for event in issue.get_timeline():
                 if event.event == "cross-referenced" and event.source and event.source.issue and event.source.issue.repository.full_name == repo_name:
-                    # 子Issueのタイムラインには「親にトラックされた」という相互参照イベントが記録される
                     parent_issue_id = event.source.issue.number
                     child_issue_id = issue.number
                     if parent_issue_id in all_issues:
