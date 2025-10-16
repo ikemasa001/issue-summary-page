@@ -1,16 +1,12 @@
-# /scripts/update_issues.py (FINAL & ROBUST VERSION)
+# /scripts/update_issues.py (ULTIMATE FINAL VERSION + DEBUG)
 import os
 from github import Github, Auth
 
-# --- Settings ---
 TEMPLATE_PATH = "scripts/template.html"
 OUTPUT_PATH = "index.html"
 ISSUE_LIMIT = 200
 
 def main():
-    """
-    GitHub repository Issuesを取得し、templateからindex.htmlを生成する
-    """
     repo_name = os.environ.get("REPO_NAME")
     github_token = os.environ.get("GITHUB_TOKEN")
 
@@ -19,11 +15,8 @@ def main():
         exit(1)
 
     try:
-        # --- 認証方法を最新の推奨される方式に更新 ---
         auth = Auth.Token(github_token)
         g = Github(auth=auth)
-        # --- ここまで ---
-
         repo = g.get_repo(repo_name)
         issues = repo.get_issues(state='open')
 
@@ -32,9 +25,7 @@ def main():
 
         for issue in issues:
             if issue_count >= ISSUE_LIMIT:
-                print(f"WARNING: Too many issues. Stopped at the limit of {ISSUE_LIMIT}.")
                 break
-
             if issue.pull_request:
                 continue
 
@@ -60,19 +51,39 @@ def main():
         if not issues_html:
             issues_html = "<p>No open issues.</p>"
 
+        # --- 🐞 DEBUG LOG START 🐞 ---
+        print("--- 🐞 DEBUG LOG START 🐞 ---")
+        print(f"\n[1] Found {issue_count} issue(s).")
+
+        print("\n[2] Generated issues_html:")
+        print("--------------------------")
+        print(issues_html)
+        print("--------------------------\n")
+
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # --- プレースホルダーの定義（この行が空になっていないか確認） ---
-        placeholder = ""
+        print("[3] Template content (first 200 chars):")
+        print("---------------------------------------")
+        print(content[:200])
+        print("---------------------------------------\n")
 
-        parts = content.split(placeholder)
+        # --- 💡エラー回避のため、変数を介さず直接文字列を書き込む ---
+        parts = content.split("")
 
         if len(parts) == 2:
             new_content = parts[0] + issues_html + parts[1]
         else:
-            print("WARNING: Placeholder '' not found or found multiple times. Check your template file.")
+            print("WARNING: Placeholder not found or found multiple times.")
             new_content = content 
+
+        print("[4] Final new_content (first 500 chars):")
+        print("---------------------------------------")
+        print(new_content[:500])
+        print("---------------------------------------\n")
+
+        print("--- 🐞 DEBUG LOG END 🐞 ---")
+        # --- 🐞 DEBUG LOG END 🐞 ---
 
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
             f.write(new_content)
