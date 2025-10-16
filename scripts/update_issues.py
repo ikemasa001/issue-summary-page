@@ -1,4 +1,4 @@
-# /scripts/update_issues.py (THE REAL FINAL VERSION)
+# /scripts/update_issues.py (v3.0 with data-labels)
 import os
 from github import Github, Auth
 from markdown_it import MarkdownIt
@@ -8,7 +8,7 @@ TEMPLATE_PATH = "scripts/template.html"
 OUTPUT_PATH = "index.html"
 ISSUE_LIMIT = 500
 
-md = MarkdownIt() # Markdown to HTML parser
+md = MarkdownIt()
 
 def generate_child_issue_summary_html(issue):
     """子Issue用のシンプルなサマリー行を生成する"""
@@ -17,8 +17,11 @@ def generate_child_issue_summary_html(issue):
         for assignee in issue.assignees:
             assignees_html += f'<img src="{assignee.avatar_url}" width="20" height="20" alt="{assignee.login}" title="{assignee.login}" style="border-radius: 50%;">'
     
+    # 💡 data-labels属性を追加
+    label_names = ",".join([label.name for label in issue.labels])
+    
     return f"""
-    <div class="issue-child" id="issue-{issue.number}">
+    <div class="issue-child" id="issue-{issue.number}" data-labels="{label_names}">
         <div class="issue-summary-line">
             <a href="{issue.html_url}" target="_blank" rel="noopener noreferrer" class="issue-title">#{issue.number} {issue.title}</a>
             <div class="assignees">{assignees_html}</div>
@@ -35,8 +38,11 @@ def generate_issue_html(issue, all_issues, parent_child_map):
     
     issue_body_html = md.render(issue.body) if issue.body else ""
 
+    # 💡 data-labels属性を追加
+    label_names = ",".join([label.name for label in issue.labels])
+    
     html = f"""
-    <div class="issue-parent" id="issue-{issue.number}">
+    <div class="issue-parent" id="issue-{issue.number}" data-labels="{label_names}">
         <div class="issue-main-content">
             <div class="issue-summary-line">
                 <span class="issue-title">#{issue.number} {issue.title}</span>
@@ -47,7 +53,6 @@ def generate_issue_html(issue, all_issues, parent_child_map):
             </div>
         </div>
     """
-    # このIssueが親である場合、子のリストをアコーディオンで追加
     if issue.number in parent_child_map:
         child_issues_html = ""
         child_count = len(parent_child_map[issue.number])
@@ -65,10 +70,11 @@ def generate_issue_html(issue, all_issues, parent_child_map):
             </details>
         </div>
         """
-    html += "</div>" # Close issue-parent
+    html += "</div>"
     return html
 
 def main():
+    # ... (main function is unchanged from the last version) ...
     try:
         print("--- Starting Final Issue Page Generation ---")
         repo_name = os.environ.get("REPO_NAME")
@@ -86,8 +92,6 @@ def main():
 
         parent_child_map = {}
         child_parent_map = {}
-
-        # 💡 発見した`parent_issue_url`を使って親子関係を特定する
         for issue in all_issues.values():
             if 'parent_issue_url' in issue.raw_data and issue.raw_data['parent_issue_url']:
                 parent_issue_number = int(issue.raw_data['parent_issue_url'].split('/')[-1])
