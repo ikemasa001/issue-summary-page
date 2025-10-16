@@ -1,4 +1,3 @@
-# /.github/workflows/deploy.yml (FINAL VERSION)
 name: Build and Deploy to Cloudflare Pages
 
 on:
@@ -23,7 +22,15 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install PyGithub markdown-it-py # 💡 新しいライブラリを追加
+        run: pip install PyGithub markdown-it-py
+
+      # --- 💡ここからデバッグステップを追加💡 ---
+      - name: Print script content for debugging
+        run: |
+          echo "--- Verifying content of scripts/update_issues.py ---"
+          cat scripts/update_issues.py
+          echo "----------------------------------------------------"
+      # --- ここまで ---
 
       - name: Update issues list in index.html
         env:
