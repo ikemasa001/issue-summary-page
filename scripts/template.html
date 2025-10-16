@@ -11,53 +11,58 @@
         }
         h1 { border-bottom: 2px solid #e1e4e8; padding-bottom: 0.5em; }
         
-        /* --- Issue全体のスタイル --- */
-        .issue-parent {
-            background-color: #ffffff; border: 1px solid #d1d5da;
-            border-radius: 6px; margin-bottom: 1em;
+        /* --- 💡 フィルターボタンのスタイルを追加 💡 --- */
+        #filters {
+            margin-bottom: 1.5em;
         }
+        .filter-button {
+            background-color: #f6f8fa;
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            border-radius: 6px;
+            color: #24292e;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 5px 16px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .filter-button:hover {
+            background-color: #f3f4f6;
+        }
+        .filter-button.active {
+            background-color: #0366d6;
+            color: white;
+            border-color: #0366d6;
+        }
+        
+        /* (以降のCSSは変更なし) */
+        .issue-parent { background-color: #ffffff; border: 1px solid #d1d5da; border-radius: 6px; margin-bottom: 1em; }
         .issue-main-content { padding: 10px 15px; }
         .issue-child { border-top: 1px solid #e1e4e8; }
-
-        /* --- タイトルと担当者アイコンの行 --- */
-        .issue-summary-line {
-            display: flex; justify-content: space-between;
-            align-items: center; padding: 5px 0;
-        }
-        .issue-title {
-            text-decoration: none; color: #24292e;
-            font-weight: 600; font-size: 1.1em;
-        }
+        .issue-summary-line { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+        .issue-title { text-decoration: none; color: #24292e; font-weight: 600; font-size: 1.1em; }
         a.issue-title:hover { color: #0366d6; }
         .assignees img { border-radius: 50%; margin-left: 5px; }
-
-        /* --- Issue本文のスタイル --- */
-        .issue-body {
-            margin-top: 10px; border-top: 1px solid #e1e4e8;
-            padding-top: 10px;
-        }
+        .issue-body { margin-top: 10px; border-top: 1px solid #e1e4e8; padding-top: 10px; }
         .issue-body p { margin-top: 0; }
         .issue-body h1, .issue-body h2, .issue-body h3 { border-bottom: 1px solid #e1e4e8; }
         .issue-body pre { background-color: #f6f8fa; padding: 16px; border-radius: 3px; }
         .issue-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 12px; }
-
-        /* --- 子Issueセクションのスタイル --- */
-        .sub-issues-section {
-            border-top: 1px solid #e1e4e8; margin-top: 15px;
-        }
-        .sub-issues-section summary {
-            cursor: pointer; padding: 10px 15px; font-weight: 600;
-        }
+        .sub-issues-section { border-top: 1px solid #e1e4e8; margin-top: 15px; }
+        .sub-issues-section summary { cursor: pointer; padding: 10px 15px; font-weight: 600; }
         .sub-issues-section summary:hover { background-color: #f6f8fa; }
-        .sub-issues-container {
-            padding-left: 15px; padding-bottom: 5px; border-top: 1px solid #e1e4e8;
-        }
+        .sub-issues-container { padding-left: 15px; padding-bottom: 5px; border-top: 1px solid #e1e4e8; }
     </style>
 </head>
 <body>
     <h1>GitHub Issue Summary</h1>
+    <div id="filters"></div>
+
     <div id="issues">
         %%ISSUES_GO_HERE%%
     </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
