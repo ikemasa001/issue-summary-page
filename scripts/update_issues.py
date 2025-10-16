@@ -1,4 +1,4 @@
-
+# /scripts/update_issues.py (MAXIMUM FORENSIC DEBUG VERSION - COMPLETE)
 import os
 from github import Github, Auth
 
@@ -21,11 +21,15 @@ def main():
         issues = repo.get_issues(state='open')
 
         issues_html = ""
-        # (Issue取得ループは変更なし...省略)
         issue_count = 0
+        
         for issue in issues:
-            if issue_count >= ISSUE_LIMIT: break
-            if issue.pull_request: continue
+            if issue_count >= ISSUE_LIMIT:
+                print(f"WARNING: Too many issues. Stopped at the limit of {ISSUE_LIMIT}.")
+                break
+            if issue.pull_request:
+                continue
+
             labels_html = ""
             for label in issue.labels:
                 hex_color = label.color
@@ -33,14 +37,25 @@ def main():
                 yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000
                 font_color = "#111" if yiq >= 128 else "white"
                 labels_html += f'<span class="label" style="background-color: #{label.color}; color: {font_color};">{label.name}</span>'
-            issues_html += f"""<div class="issue"><h2><a href="{issue.html_url}" target="_blank" rel="noopener noreferrer">#{issue.number} {issue.title}</a></h2><div class="issue-meta"><span>by {issue.user.login}</span></div><div>{labels_html}</div></div>"""
+            
+            issues_html += f"""
+            <div class="issue">
+                <h2><a href="{issue.html_url}" target="_blank" rel="noopener noreferrer">#{issue.number} {issue.title}</a></h2>
+                <div class="issue-meta">
+                    <span>by {issue.user.login}</span>
+                </div>
+                <div>{labels_html}</div>
+            </div>
+            """
             issue_count += 1
-        if not issues_html: issues_html = "<p>No open issues.</p>"
+
+        if not issues_html:
+            issues_html = "<p>No open issues.</p>"
         
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # --- 💡ここから徹底的なデバッグログを追加💡 ---
+        # --- 🐞 FORENSIC DEBUG LOG 🐞 ---
         print("\n--- 🐞 FORENSIC DEBUG LOG 🐞 ---")
         
         # 1. 読み込んだテンプレートの内容を調査
