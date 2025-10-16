@@ -5,13 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Issue Summary</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; margin: 2em; }
-        h1 { border-bottom: 2px solid #eee; }
-        .issue { border: 1px solid #ddd; border-radius: 5px; padding: 1em; margin-bottom: 1em; }
-        .issue h2 { margin-top: 0; }
-        .issue a { text-decoration: none; color: #0366d6; }
-        .issue-meta { font-size: 0.9em; color: #586069; }
-        .label { display: inline-block; padding: .2em .6em; margin-right: 5px; font-size: 0.8em; font-weight: bold; color: white; border-radius: 2em; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", Helvetica, Arial, sans-serif;
+            line-height: 1.6; 
+            margin: 2em; 
+            background-color: #f6f8fa;
+            color: #24292e;
+        }
+        h1 { 
+            border-bottom: 2px solid #e1e4e8; 
+            padding-bottom: 0.5em;
+        }
+        
+        /* --- Issue全体のスタイル --- */
+        .issue-parent {
+            background-color: #ffffff;
+            border: 1px solid #d1d5da;
+            border-radius: 6px;
+            margin-bottom: 1em;
+            overflow: hidden; /* 角丸をキレイに見せるため */
+        }
+        .issue-child {
+            border-top: 1px solid #e1e4e8;
+        }
+
+        /* --- タイトルと担当者アイコンの行 --- */
+        .issue-summary-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+        }
+        
+        /* --- Issueタイトル --- */
+        .issue-title {
+            text-decoration: none;
+            color: #24292e;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        a.issue-title:hover {
+            color: #0366d6;
+        }
+        
+        /* --- 担当者アイコン --- */
+        .assignees img {
+            border-radius: 50%;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        /* --- アコーディオンのスタイル --- */
+        details {
+            width: 100%;
+        }
+        summary {
+            cursor: pointer;
+            list-style: revert; /* 三角マークを表示 */
+        }
+        summary:hover {
+            background-color: #f6f8fa;
+        }
+
+        /* --- 子Issueのコンテナ --- */
+        .sub-issues-container {
+            margin-left: 30px; /* 子Issueをインデント */
+            border-left: 2px solid #e1e4e8;
+            padding-left: 15px;
+            padding-bottom: 10px;
+        }
+
+        /* --- ラベルのスタイル（変更なし） --- */
+        .label { 
+            display: inline-block; padding: .2em .6em; margin-right: 5px; 
+            font-size: 0.8em; font-weight: bold; color: white; border-radius: 2em;
+        }
     </style>
 </head>
 <body>
