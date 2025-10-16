@@ -1,4 +1,4 @@
-# /scripts/update_issues.py (MAXIMUM FORENSIC DEBUG VERSION - COMPLETE)
+# /scripts/update_issues.py (FINAL VERSION v2)
 import os
 from github import Github, Auth
 
@@ -25,7 +25,6 @@ def main():
         
         for issue in issues:
             if issue_count >= ISSUE_LIMIT:
-                print(f"WARNING: Too many issues. Stopped at the limit of {ISSUE_LIMIT}.")
                 break
             if issue.pull_request:
                 continue
@@ -55,30 +54,15 @@ def main():
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # --- 🐞 FORENSIC DEBUG LOG 🐞 ---
-        print("\n--- 🐞 FORENSIC DEBUG LOG 🐞 ---")
+        # 新しい、安全なプレースホルダーを使用
+        placeholder = "%%ISSUES_GO_HERE%%"
         
-        # 1. 読み込んだテンプレートの内容を調査
-        print(f"[A] Type of 'content' variable: {type(content)}")
-        print(f"[B] Length of 'content' variable: {len(content)}")
-
-        # 2. プレースホルダー（分割の基準となる文字列）を調査
-        placeholder = ""
-        print(f"[C] Type of 'placeholder' variable: {type(placeholder)}")
-        print(f"[D] Length of 'placeholder' variable: {len(placeholder)}")
-        print(f"[E] Value of 'placeholder' variable: '{placeholder}'")
-        
-        # 3. エラーが発生する直前に最終チェック
-        print("[F] Preparing to execute: content.split(placeholder)")
-        print("--------------------------------\n")
-        # --- ここまで ---
-
         parts = content.split(placeholder)
 
         if len(parts) == 2:
             new_content = parts[0] + issues_html + parts[1]
         else:
-            print("WARNING: Placeholder not found or found multiple times.")
+            print(f"WARNING: Placeholder '{placeholder}' not found or found multiple times.")
             new_content = content 
 
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
