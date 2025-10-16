@@ -11,54 +11,57 @@
         }
         h1 { border-bottom: 2px solid #e1e4e8; padding-bottom: 0.5em; }
         
-        /* --- Issue全体のスタイル --- */
-        .issue-parent {
-            background-color: #ffffff; border: 1px solid #d1d5da;
-            border-radius: 6px; margin-bottom: 1em;
+        /* --- 💡 フィルターボタンのスタイルを追加 💡 --- */
+        #filters {
+            margin-bottom: 1.5em;
         }
+        .filter-button {
+            background-color: #f6f8fa;
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            border-radius: 6px;
+            color: #24292e;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 5px 16px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .filter-button:hover {
+            background-color: #f3f4f6;
+        }
+        .filter-button.active {
+            background-color: #0366d6;
+            color: white;
+            border-color: #0366d6;
+        }
+        
+        /* (以降のCSSは変更なし) */
+        .issue-parent { background-color: #ffffff; border: 1px solid #d1d5da; border-radius: 6px; margin-bottom: 1em; }
         .issue-main-content { padding: 10px 15px; }
         .issue-child { border-top: 1px solid #e1e4e8; }
-
-        /* --- タイトルと担当者アイコンの行 --- */
-        .issue-summary-line {
-            display: flex; justify-content: space-between;
-            align-items: center; padding: 5px 0;
-        }
-        .issue-title {
-            text-decoration: none; color: #24292e;
-            font-weight: 600; font-size: 1.1em;
-        }
+        .issue-summary-line { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+        .issue-title { text-decoration: none; color: #24292e; font-weight: 600; font-size: 1.1em; }
         a.issue-title:hover { color: #0366d6; }
         .assignees img { border-radius: 50%; margin-left: 5px; }
-
-        /* --- Issue本文のスタイル --- */
-        .issue-body {
-            margin-top: 10px; border-top: 1px solid #e1e4e8;
-            padding-top: 10px;
-        }
+        .issue-body { margin-top: 10px; border-top: 1px solid #e1e4e8; padding-top: 10px; }
         .issue-body p { margin-top: 0; }
         .issue-body h1, .issue-body h2, .issue-body h3 { border-bottom: 1px solid #e1e4e8; }
         .issue-body pre { background-color: #f6f8fa; padding: 16px; border-radius: 3px; }
         .issue-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 12px; }
-
-        /* --- 子Issueセクションのスタイル --- */
-        .sub-issues-section {
-            border-top: 1px solid #e1e4e8; margin-top: 15px;
-        }
-        .sub-issues-section summary {
-            cursor: pointer; padding: 10px 15px; font-weight: 600;
-        }
+        .sub-issues-section { border-top: 1px solid #e1e4e8; margin-top: 15px; }
+        .sub-issues-section summary { cursor: pointer; padding: 10px 15px; font-weight: 600; }
         .sub-issues-section summary:hover { background-color: #f6f8fa; }
-        .sub-issues-container {
-            padding-left: 15px; padding-bottom: 5px; border-top: 1px solid #e1e4e8;
-        }
+        .sub-issues-container { padding-left: 15px; padding-bottom: 5px; border-top: 1px solid #e1e4e8; }
     </style>
 </head>
 <body>
     <h1>GitHub Issue Summary</h1>
+    <div id="filters"></div>
+
     <div id="issues">
         
-    <div class="issue-parent" id="issue-1">
+    <div class="issue-parent" id="issue-1" data-labels="">
         <div class="issue-main-content">
             <div class="issue-summary-line">
                 <span class="issue-title">#1 テストIssue</span>
@@ -76,7 +79,7 @@ B　のことについて。</p>
                 <summary>Sub-issues (1)</summary>
                 <div class="sub-issues-container">
                     
-    <div class="issue-child" id="issue-2">
+    <div class="issue-child" id="issue-2" data-labels="">
         <div class="issue-summary-line">
             <a href="https://github.com/ikemasa001/issue-summary-page/issues/2" target="_blank" rel="noopener noreferrer" class="issue-title">#2 さぶいしゅー</a>
             <div class="assignees"></div>
@@ -87,7 +90,7 @@ B　のことについて。</p>
             </details>
         </div>
         </div>
-    <div class="issue-parent" id="issue-3">
+    <div class="issue-parent" id="issue-3" data-labels="">
         <div class="issue-main-content">
             <div class="issue-summary-line">
                 <span class="issue-title">#3 新たなイシュー</span>
@@ -99,5 +102,7 @@ B　のことについて。</p>
         </div>
     </div>
     </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
