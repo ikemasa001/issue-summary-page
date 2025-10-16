@@ -1,3 +1,4 @@
+# /.github/workflows/deploy.yml (WITH FINAL VERIFICATION STEP)
 name: Build and Deploy to Cloudflare Pages
 
 on:
@@ -24,12 +25,17 @@ jobs:
       - name: Install dependencies
         run: pip install PyGithub markdown-it-py
 
-      # --- 💡ここからデバッグステップを追加💡 ---
-      - name: Print script content for debugging
+      # --- 💡 ここからが確認用のデバッグステップです 💡 ---
+      - name: Verify all file contents before execution
         run: |
-          echo "--- Verifying content of scripts/update_issues.py ---"
+          echo "--- 1. Verifying content of [scripts/update_issues.py] ---"
           cat scripts/update_issues.py
-          echo "----------------------------------------------------"
+          echo "--- 2. Verifying content of [scripts/template.html] ---"
+          cat scripts/template.html
+          echo "--- 3. Verifying content of [main.js] ---"
+          # main.jsが存在しない場合もエラーにしない
+          cat main.js || echo "!!! main.js was not found in the root directory !!!"
+          echo "----------------------------------------------------------"
       # --- ここまで ---
 
       - name: Update issues list in index.html
