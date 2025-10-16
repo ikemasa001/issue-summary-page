@@ -1,4 +1,4 @@
-# /scripts/update_issues.py (DEBUG VERSION)
+# /scripts/update_issues.py (FINAL VERSION)
 import os
 from github import Github
 
@@ -56,32 +56,22 @@ def main():
         if not issues_html:
             issues_html = "<p>No open issues.</p>"
 
-        # --- DEBUGGING OUTPUT START ---
-        print("--- 🐞 DEBUG LOG START 🐞 ---")
-        print(f"\n[1] Found {issue_count} issue(s).")
-
-        print("\n[2] Generated issues_html:")
-        print("--------------------------")
-        print(issues_html)
-        print("--------------------------\n")
-
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
-        print("[3] Template content (first 200 chars):")
-        print("---------------------------------------")
-        print(content[:200])
-        print("---------------------------------------\n")
+        # --- 💡ここが修正箇所です💡 ---
+        # 'replace'を使わず、文字列を分割して結合する安全な方法に変更
+        placeholder = ""
+        parts = content.split(placeholder)
 
-        new_content = content.replace("", issues_html)
-
-        print("[4] Final new_content (first 500 chars):")
-        print("---------------------------------------")
-        print(new_content[:500])
-        print("---------------------------------------\n")
-
-        print("--- 🐞 DEBUG LOG END 🐞 ---")
-        # --- DEBUGGING OUTPUT END ---
+        if len(parts) == 2:
+            # プレースホルダーが1つ見つかった場合、その間に差し込む
+            new_content = parts[0] + issues_html + parts[1]
+        else:
+            # プレースホルダーが見つからない、または複数ある場合はエラーを防ぐ
+            print("WARNING: Placeholder '' not found or found multiple times. Check your template file.")
+            new_content = content 
+        # --- 修正箇所ここまで ---
 
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
             f.write(new_content)
