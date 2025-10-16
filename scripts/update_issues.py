@@ -1,4 +1,4 @@
-# /scripts/update_issues.py (ULTIMATE FINAL VERSION + DEBUG)
+# /scripts/update_issues.py
 import os
 from github import Github, Auth
 
@@ -22,7 +22,7 @@ def main():
 
         issues_html = ""
         issue_count = 0
-
+        
         for issue in issues:
             if issue_count >= ISSUE_LIMIT:
                 break
@@ -36,7 +36,7 @@ def main():
                 yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000
                 font_color = "#111" if yiq >= 128 else "white"
                 labels_html += f'<span class="label" style="background-color: #{label.color}; color: {font_color};">{label.name}</span>'
-
+            
             issues_html += f"""
             <div class="issue">
                 <h2><a href="{issue.html_url}" target="_blank" rel="noopener noreferrer">#{issue.number} {issue.title}</a></h2>
@@ -50,25 +50,10 @@ def main():
 
         if not issues_html:
             issues_html = "<p>No open issues.</p>"
-
-        # --- 🐞 DEBUG LOG START 🐞 ---
-        print("--- 🐞 DEBUG LOG START 🐞 ---")
-        print(f"\n[1] Found {issue_count} issue(s).")
-
-        print("\n[2] Generated issues_html:")
-        print("--------------------------")
-        print(issues_html)
-        print("--------------------------\n")
-
+        
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
-        print("[3] Template content (first 200 chars):")
-        print("---------------------------------------")
-        print(content[:200])
-        print("---------------------------------------\n")
-
-        # --- 💡エラー回避のため、変数を介さず直接文字列を書き込む ---
         parts = content.split("")
 
         if len(parts) == 2:
@@ -77,17 +62,9 @@ def main():
             print("WARNING: Placeholder not found or found multiple times.")
             new_content = content 
 
-        print("[4] Final new_content (first 500 chars):")
-        print("---------------------------------------")
-        print(new_content[:500])
-        print("---------------------------------------\n")
-
-        print("--- 🐞 DEBUG LOG END 🐞 ---")
-        # --- 🐞 DEBUG LOG END 🐞 ---
-
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
             f.write(new_content)
-
+        
         print(f"Successfully generated {OUTPUT_PATH} ({issue_count} issue(s))")
 
     except Exception as e:
