@@ -1,6 +1,6 @@
-# /scripts/update_issues.py (FINAL VERSION)
+# /scripts/update_issues.py (FINAL & ROBUST VERSION)
 import os
-from github import Github
+from github import Github, Auth
 
 # --- Settings ---
 TEMPLATE_PATH = "scripts/template.html"
@@ -19,7 +19,11 @@ def main():
         exit(1)
 
     try:
-        g = Github(github_token)
+        # --- 認証方法を最新の推奨される方式に更新 ---
+        auth = Auth.Token(github_token)
+        g = Github(auth=auth)
+        # --- ここまで ---
+
         repo = g.get_repo(repo_name)
         issues = repo.get_issues(state='open')
 
@@ -59,19 +63,16 @@ def main():
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # --- 💡ここが修正箇所です💡 ---
-        # 'replace'を使わず、文字列を分割して結合する安全な方法に変更
+        # --- プレースホルダーの定義（この行が空になっていないか確認） ---
         placeholder = ""
+
         parts = content.split(placeholder)
 
         if len(parts) == 2:
-            # プレースホルダーが1つ見つかった場合、その間に差し込む
             new_content = parts[0] + issues_html + parts[1]
         else:
-            # プレースホルダーが見つからない、または複数ある場合はエラーを防ぐ
             print("WARNING: Placeholder '' not found or found multiple times. Check your template file.")
             new_content = content 
-        # --- 修正箇所ここまで ---
 
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
             f.write(new_content)
