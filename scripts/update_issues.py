@@ -3,11 +3,8 @@ import os
 from github import Github
 
 # --- 設定 ---
-# テンプレートファイルのパス
 TEMPLATE_PATH = "scripts/template.html"
-# 出力ファイルのパス
 OUTPUT_PATH = "index.html"
-# 取得するIssueの上限数（安全装置）
 ISSUE_LIMIT = 200
 
 def main():
@@ -28,13 +25,12 @@ def main():
 
         issues_html = ""
         issue_count = 0
-        # 上限数に達するか、Issueがなくなるまでループ
+
         for issue in issues:
             if issue_count >= ISSUE_LIMIT:
                 print(f"警告: Issueが多いため、上限の{ISSUE_LIMIT}件で中断しました。")
                 break
 
-            # PRは除外する
             if issue.pull_request:
                 continue
 
@@ -60,14 +56,11 @@ def main():
         if not issues_html:
             issues_html = "<p>現在オープンなIssueはありません。</p>"
 
-        # テンプレートファイルを読み込む
         with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # の部分を生成したHTMLで置換
         new_content = content.replace("", issues_html)
 
-        # 新しいindex.htmlとして書き出す（常に上書き）
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
             f.write(new_content)
 
