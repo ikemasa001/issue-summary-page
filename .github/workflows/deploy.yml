@@ -1,3 +1,4 @@
+# /.github/workflows/deploy.yml (FORENSIC DEBUG VERSION)
 name: Build and Deploy to Cloudflare Pages
 
 on:
@@ -23,6 +24,14 @@ jobs:
 
       - name: Install dependencies
         run: pip install PyGithub
+      
+      # --- 💡ここからデバッグステップを追加💡 ---
+      - name: Check files before running script
+        run: |
+          echo "--- Checking file system state ---"
+          ls -la scripts/
+          echo "--------------------------------"
+      # --- ここまで ---
 
       - name: Update issues list in index.html
         env:
@@ -30,6 +39,7 @@ jobs:
           REPO_NAME: ${{ github.repository }}
         run: python scripts/update_issues.py
 
+      # (以降のステップは変更なし)
       - name: Commit and push if changed
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -45,7 +55,7 @@ jobs:
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: 'issue-summary-page'
           directory: '.'
