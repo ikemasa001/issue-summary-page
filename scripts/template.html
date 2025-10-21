@@ -11,32 +11,11 @@
         }
         h1 { border-bottom: 2px solid #e1e4e8; padding-bottom: 0.5em; }
         
-        /* --- 💡 フィルターボタンのスタイルを追加 💡 --- */
-        #filters {
-            margin-bottom: 1.5em;
-        }
-        .filter-button {
-            background-color: #f6f8fa;
-            border: 1px solid rgba(27, 31, 35, 0.15);
-            border-radius: 6px;
-            color: #24292e;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 5px 16px;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-        .filter-button:hover {
-            background-color: #f3f4f6;
-        }
-        .filter-button.active {
-            background-color: #0366d6;
-            color: white;
-            border-color: #0366d6;
-        }
+        #filters { margin-bottom: 1.5em; }
+        .filter-button { background-color: #f6f8fa; border: 1px solid rgba(27, 31, 35, 0.15); border-radius: 6px; color: #24292e; cursor: pointer; font-size: 14px; font-weight: 500; padding: 5px 16px; margin-right: 8px; margin-bottom: 8px; }
+        .filter-button:hover { background-color: #f3f4f6; }
+        .filter-button.active { background-color: #0366d6; color: white; border-color: #0366d6; }
         
-        /* (以降のCSSは変更なし) */
         .issue-parent { background-color: #ffffff; border: 1px solid #d1d5da; border-radius: 6px; margin-bottom: 1em; }
         .issue-main-content { padding: 10px 15px; }
         .issue-child { border-top: 1px solid #e1e4e8; }
@@ -45,7 +24,7 @@
         a.issue-title:hover { color: #0366d6; }
         .assignees img { border-radius: 50%; margin-left: 5px; }
         .issue-body { margin-top: 10px; border-top: 1px solid #e1e4e8; padding-top: 10px; }
-        .issue-body p { margin-top: 0; }
+        .issue-body p:first-child { margin-top: 0; }
         .issue-body h1, .issue-body h2, .issue-body h3 { border-bottom: 1px solid #e1e4e8; }
         .issue-body pre { background-color: #f6f8fa; padding: 16px; border-radius: 3px; }
         .issue-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 12px; }
@@ -53,16 +32,62 @@
         .sub-issues-section summary { cursor: pointer; padding: 10px 15px; font-weight: 600; }
         .sub-issues-section summary:hover { background-color: #f6f8fa; }
         .sub-issues-container { padding-left: 15px; padding-bottom: 5px; border-top: 1px solid #e1e4e8; }
+
+        /* --- 💡 ここからリンクプレビュー用のCSSを追加 💡 --- */
+        .link-preview {
+            display: flex;
+            border: 1px solid #d1d5da;
+            border-radius: 6px;
+            margin: 1em 0;
+            text-decoration: none;
+            color: inherit;
+            background-color: #fff;
+            overflow: hidden;
+            max-width: 500px;
+        }
+        .link-preview:hover {
+            border-color: #0366d6;
+        }
+        .preview-image {
+            flex-shrink: 0;
+            width: 120px;
+            height: 120px;
+        }
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 画像をコンテナに合わせてトリミング */
+        }
+        .preview-content {
+            flex-grow: 1;
+            padding: 10px;
+            overflow: hidden;
+        }
+        .preview-title {
+            font-weight: 600;
+            font-size: 0.9em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 長いタイトルは...で省略 */
+        }
+        .preview-description {
+            font-size: 0.8em;
+            color: #586069;
+            margin-top: 5px;
+            max-height: 40px; /* 2行まで表示 */
+            overflow: hidden;
+        }
+        .preview-site {
+            font-size: 0.7em;
+            color: #586069;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
-    <h1>Amazonセール情報</h1>
+    <h1>GitHub Issue Summary</h1>
     <div id="filters"></div>
-
-    <div id="issues">
-        %%ISSUES_GO_HERE%%
-    </div>
-
+    <div id="issues">%%ISSUES_GO_HERE%%</div>
     <script src="main.js"></script>
 </body>
 </html>
