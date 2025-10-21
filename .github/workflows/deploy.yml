@@ -1,11 +1,9 @@
-# /.github/workflows/deploy.yml (WITH FINAL VERIFICATION STEP)
+# /.github/workflows/deploy.yml
 name: Build and Deploy to Cloudflare Pages
-
 on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -16,34 +14,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
       - name: Install dependencies
-        run: pip install PyGithub markdown-it-py
-
-      # --- 💡 ここからが確認用のデバッグステップです 💡 ---
-      - name: Verify all file contents before execution
-        run: |
-          echo "--- 1. Verifying content of [scripts/update_issues.py] ---"
-          cat scripts/update_issues.py
-          echo "--- 2. Verifying content of [scripts/template.html] ---"
-          cat scripts/template.html
-          echo "--- 3. Verifying content of [main.js] ---"
-          # main.jsが存在しない場合もエラーにしない
-          cat main.js || echo "!!! main.js was not found in the root directory !!!"
-          echo "----------------------------------------------------------"
-      # --- ここまで ---
-
+        # 💡 新しいライブラリ `beautifulsoup4` を追加
+        run: pip install PyGithub markdown-it-py requests beautifulsoup4
       - name: Update issues list in index.html
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           REPO_NAME: ${{ github.repository }}
         run: python scripts/update_issues.py
-
+      # (以降のステップは変更なし)
       - name: Commit and push if changed
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -55,7 +38,6 @@ jobs:
           else
             echo "No changes to commit."
           fi
-
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
