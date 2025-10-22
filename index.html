@@ -11,32 +11,11 @@
         }
         h1 { border-bottom: 2px solid #e1e4e8; padding-bottom: 0.5em; }
         
-        /* --- 💡 フィルターボタンのスタイルを追加 💡 --- */
-        #filters {
-            margin-bottom: 1.5em;
-        }
-        .filter-button {
-            background-color: #f6f8fa;
-            border: 1px solid rgba(27, 31, 35, 0.15);
-            border-radius: 6px;
-            color: #24292e;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 5px 16px;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-        .filter-button:hover {
-            background-color: #f3f4f6;
-        }
-        .filter-button.active {
-            background-color: #0366d6;
-            color: white;
-            border-color: #0366d6;
-        }
+        #filters { margin-bottom: 1.5em; }
+        .filter-button { background-color: #f6f8fa; border: 1px solid rgba(27, 31, 35, 0.15); border-radius: 6px; color: #24292e; cursor: pointer; font-size: 14px; font-weight: 500; padding: 5px 16px; margin-right: 8px; margin-bottom: 8px; }
+        .filter-button:hover { background-color: #f3f4f6; }
+        .filter-button.active { background-color: #0366d6; color: white; border-color: #0366d6; }
         
-        /* (以降のCSSは変更なし) */
         .issue-parent { background-color: #ffffff; border: 1px solid #d1d5da; border-radius: 6px; margin-bottom: 1em; }
         .issue-main-content { padding: 10px 15px; }
         .issue-child { border-top: 1px solid #e1e4e8; }
@@ -45,7 +24,7 @@
         a.issue-title:hover { color: #0366d6; }
         .assignees img { border-radius: 50%; margin-left: 5px; }
         .issue-body { margin-top: 10px; border-top: 1px solid #e1e4e8; padding-top: 10px; }
-        .issue-body p { margin-top: 0; }
+        .issue-body p:first-child { margin-top: 0; }
         .issue-body h1, .issue-body h2, .issue-body h3 { border-bottom: 1px solid #e1e4e8; }
         .issue-body pre { background-color: #f6f8fa; padding: 16px; border-radius: 3px; }
         .issue-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 12px; }
@@ -53,40 +32,84 @@
         .sub-issues-section summary { cursor: pointer; padding: 10px 15px; font-weight: 600; }
         .sub-issues-section summary:hover { background-color: #f6f8fa; }
         .sub-issues-container { padding-left: 15px; padding-bottom: 5px; border-top: 1px solid #e1e4e8; }
+
+        /* --- 💡 ここからリンクプレビュー用のCSSを追加 💡 --- */
+        .link-preview {
+            display: flex;
+            border: 1px solid #d1d5da;
+            border-radius: 6px;
+            margin: 1em 0;
+            text-decoration: none;
+            color: inherit;
+            background-color: #fff;
+            overflow: hidden;
+            max-width: 500px;
+        }
+        .link-preview:hover {
+            border-color: #0366d6;
+        }
+        .preview-image {
+            flex-shrink: 0;
+            width: 120px;
+            height: 120px;
+        }
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 画像をコンテナに合わせてトリミング */
+        }
+        .preview-content {
+            flex-grow: 1;
+            padding: 10px;
+            overflow: hidden;
+        }
+        .preview-title {
+            font-weight: 600;
+            font-size: 0.9em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 長いタイトルは...で省略 */
+        }
+        .preview-description {
+            font-size: 0.8em;
+            color: #586069;
+            margin-top: 5px;
+            max-height: 40px; /* 2行まで表示 */
+            overflow: hidden;
+        }
+        .preview-site {
+            font-size: 0.7em;
+            color: #586069;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
     <h1>GitHub Issue Summary</h1>
     <div id="filters"></div>
-
     <div id="issues">
-        
     <div class="issue-parent" id="issue-1" data-labels="">
         <div class="issue-main-content">
             <div class="issue-summary-line">
                 <span class="issue-title">#1 テストIssue</span>
                 <div class="assignees"></div>
             </div>
-            <div class="issue-body">
-                <p>A　のことについて。
+            <div class="issue-body"><p>A　のことについて。
 B　のことについて。</p>
-
-            </div>
+</div>
         </div>
     
         <div class="sub-issues-section">
             <details>
                 <summary>Sub-issues (1)</summary>
                 <div class="sub-issues-container">
-                    
     <div class="issue-child" id="issue-2" data-labels="">
         <div class="issue-summary-line">
             <a href="https://github.com/ikemasa001/issue-summary-page/issues/2" target="_blank" rel="noopener noreferrer" class="issue-title">#2 さぶいしゅー</a>
             <div class="assignees"></div>
         </div>
     </div>
-    
-                </div>
+    </div>
             </details>
         </div>
         </div>
@@ -96,9 +119,7 @@ B　のことについて。</p>
                 <span class="issue-title">#3 新たなイシュー</span>
                 <div class="assignees"></div>
             </div>
-            <div class="issue-body">
-                
-            </div>
+            <div class="issue-body"></div>
         </div>
     </div>
     <div class="issue-parent" id="issue-4" data-labels="">
@@ -107,16 +128,12 @@ B　のことについて。</p>
                 <span class="issue-title">#4 ttest</span>
                 <div class="assignees"></div>
             </div>
-            <div class="issue-body">
-                <img width="832" height="1248" alt="Image" src="https://github.com/user-attachments/assets/133d9cbb-7d01-40bd-a0a3-fa62a95a6112" />
-<p><a href="url">https://amzn.to/48GTjwN</a></p>
-<p><a href="https://amzn.to/48GTjwN">test</a></p>
-
-            </div>
+            <div class="issue-body"><p>&lt;img width=&quot;832&quot; height=&quot;1248&quot; alt=&quot;Image&quot; src=&quot;&lt;a href=&quot;https://github.com/user-attachments/assets/133d9cbb-7d01-40bd-a0a3-fa62a95a6112&quot;&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;https://github.com/user-attachments/assets/133d9cbb-7d01-40bd-a0a3-fa62a95a6112&quot;</a> /&gt;</p>
+<p><a href="url"><a href="https://amzn.to/48GTjwN](url)" target="_blank" rel="noopener noreferrer">https://amzn.to/48GTjwN</a></a></p>
+<p>[test](<a href="https://amzn.to/48GTjwN)" target="_blank" rel="noopener noreferrer">https://amzn.to/48GTjwN)</a></p>
+</div>
         </div>
-    </div>
-    </div>
-
+    </div></div>
     <script src="main.js"></script>
 </body>
 </html>
