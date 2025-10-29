@@ -30,9 +30,9 @@ def create_link_previews(markdown_text):
             print(f"-> Status Code: {response.status_code}")
 
             # 💡 --- ここがデバッグコードです --- 💡
-            # 取得したHTMLの先頭500文字をログに出力
-            print("\n-> Received HTML (first 500 chars):")
-            print(response.text[:500])
+            # 取得したHTMLの*全体*をログに出力
+            print("\n-> Received FULL HTML:")
+            print(response.text)
             print("---------------------------------\n")
             # --- デバッグコードここまで ---
 
