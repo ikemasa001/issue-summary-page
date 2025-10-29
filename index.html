@@ -11,29 +11,45 @@
         }
         h1 { border-bottom: 2px solid #e1e4e8; padding-bottom: 0.5em; }
         
+        /* --- フィルターボタン --- */
         #filters { margin-bottom: 1.5em; }
         .filter-button { background-color: #f6f8fa; border: 1px solid rgba(27, 31, 35, 0.15); border-radius: 6px; color: #24292e; cursor: pointer; font-size: 14px; font-weight: 500; padding: 5px 16px; margin-right: 8px; margin-bottom: 8px; }
         .filter-button:hover { background-color: #f3f4f6; }
         .filter-button.active { background-color: #0366d6; color: white; border-color: #0366d6; }
         
+        /* --- Issue共通 --- */
         .issue-parent { background-color: #ffffff; border: 1px solid #d1d5da; border-radius: 6px; margin-bottom: 1em; }
         .issue-main-content { padding: 10px 15px; }
         .issue-child { border-top: 1px solid #e1e4e8; }
         .issue-summary-line { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
         .issue-title { text-decoration: none; color: #24292e; font-weight: 600; font-size: 1.1em; }
         a.issue-title:hover { color: #0366d6; }
+        
+        /* --- 担当者とアクションボタン --- */
+        .meta-container { display: flex; align-items: center; }
+        .assignees { display: flex; align-items: center; }
         .assignees img { border-radius: 50%; margin-left: 5px; }
+        .actions-container { margin-left: 1em; }
+        .action-button {
+            font-size: 12px; padding: 3px 12px; border-radius: 2em;
+            border: 1px solid #d1d5da; background-color: #f6f8fa;
+            cursor: pointer;
+        }
+        .action-button:hover { background-color: #f3f4f6; border-color: #aeb5be; }
+
+        /* --- Issue本文 --- */
         .issue-body { margin-top: 10px; border-top: 1px solid #e1e4e8; padding-top: 10px; }
         .issue-body p:first-child { margin-top: 0; }
-        .issue-body h1, .issue-body h2, .issue-body h3 { border-bottom: 1px solid #e1e4e8; }
         .issue-body pre { background-color: #f6f8fa; padding: 16px; border-radius: 3px; }
         .issue-body code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 12px; }
+
+        /* --- サブIssue --- */
         .sub-issues-section { border-top: 1px solid #e1e4e8; margin-top: 15px; }
         .sub-issues-section summary { cursor: pointer; padding: 10px 15px; font-weight: 600; }
         .sub-issues-section summary:hover { background-color: #f6f8fa; }
         .sub-issues-container { padding-left: 15px; padding-bottom: 5px; border-top: 1px solid #e1e4e8; }
 
-        /* --- 💡 ここからリンクプレビュー用のCSSを追加 💡 --- */
+        /* --- リンクプレビュー --- */
         .link-preview {
             display: flex;
             border: 1px solid #d1d5da;
@@ -45,43 +61,13 @@
             overflow: hidden;
             max-width: 500px;
         }
-        .link-preview:hover {
-            border-color: #0366d6;
-        }
-        .preview-image {
-            flex-shrink: 0;
-            width: 120px;
-            height: 120px;
-        }
-        .preview-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 画像をコンテナに合わせてトリミング */
-        }
-        .preview-content {
-            flex-grow: 1;
-            padding: 10px;
-            overflow: hidden;
-        }
-        .preview-title {
-            font-weight: 600;
-            font-size: 0.9em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis; /* 長いタイトルは...で省略 */
-        }
-        .preview-description {
-            font-size: 0.8em;
-            color: #586069;
-            margin-top: 5px;
-            max-height: 40px; /* 2行まで表示 */
-            overflow: hidden;
-        }
-        .preview-site {
-            font-size: 0.7em;
-            color: #586069;
-            margin-top: 8px;
-        }
+        .link-preview:hover { border-color: #0366d6; }
+        .preview-image { flex-shrink: 0; width: 120px; height: 120px; }
+        .preview-image img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-content { flex-grow: 1; padding: 10px; overflow: hidden; }
+        .preview-title { font-weight: 600; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .preview-description { font-size: 0.8em; color: #586069; margin-top: 5px; max-height: 40px; overflow: hidden; }
+        .preview-site { font-size: 0.7em; color: #586069; margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -92,12 +78,19 @@
         <div class="issue-main-content">
             <div class="issue-summary-line">
                 <span class="issue-title">#5 【セール】ザ・ノースフェイス ジェスター JESTER メンズ レディース リュックサック バックパック [並行輸入品]</span>
-                <div class="assignees"></div>
+                <div class="meta-container">
+                    <div class="assignees"></div>
+                    <div class="actions-container">
+                        <button class="action-button share-button" data-title="#5 【セール】ザ・ノースフェイス ジェスター JESTER メンズ レディース リュックサック バックパック [並行輸入品]" data-id="5">共有</button>
+                        <button class="action-button copy-button" data-id="5">リンクをコピー</button>
+                    </div>
+                </div>
             </div>
-            <div class="issue-body"><p>「ザ・ノースフェイス ジェスター」は、日常からアウトドアまで対応する大容量と高機能が魅力！独立PCスリーブ搭載で、整理整頓も完璧。毎日をタフに支える定番バックパックです！**\n\n<a href="https://amzn.to/3JfVcX3" target="_blank" rel="noopener noreferrer">https://amzn.to/3JfVcX3</a></p>
-</div>
+            <div class="issue-body">
+                <p>「ザ・ノースフェイス ジェスター」は、日常からアウトドアまで対応する大容量と高機能が魅力！独立PCスリーブ搭載で、整理整頓も完璧。毎日をタフに支える定番バックパックです！**\n\n<a href="https://amzn.to/3JfVcX3" target="_blank" rel="noopener noreferrer">https://amzn.to/3JfVcX3</a></p>
+
+            </div>
         </div>
     </div></div>
-    <script src="main.js"></script>
-</body>
+    <script src="main.js"></script></body>
 </html>
